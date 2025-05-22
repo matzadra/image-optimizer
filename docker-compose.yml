@@ -1,0 +1,62 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    container_name: image-optimizer-api
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./uploads:/app/uploads
+      - ./outputs:/app/outputs
+    environment:
+      - PORT=3000
+      - RABBITMQ_URL=amqp://rabbitmq:5672
+      - MONGO_URL=mongodb://mongo:27017/image-optimizer
+      - UPLOAD_DIR=/app/uploads
+      - OUTPUT_DIR=/app/outputs
+    depends_on:
+      - mongo
+      - rabbitmq
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:3000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  worker:
+    build:
+      context: .
+      dockerfile: apps/worker/Dockerfile
+    volumes:
+      - ./uploads:/app/uploads
+      - ./outputs:/app/outputs
+    environment:
+      - RABBITMQ_URL=amqp://rabbitmq:5672
+      - MONGO_URL=mongodb://mongo:27017/image-optimizer
+      - UPLOAD_DIR=/app/uploads
+      - OUTPUT_DIR=/app/outputs
+    depends_on:
+      - mongo
+      - rabbitmq
+
+  mongo:
+    image: mongo:8
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  rabbitmq:
+    image: rabbitmq:4.1-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+
+volumes:
+  mongo_data:

@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@libs/*": ["libs/*"],
+      "@shared/*": ["shared/*"]
+    }
+  },
+  "include": ["apps", "libs", "shared"]
+}
