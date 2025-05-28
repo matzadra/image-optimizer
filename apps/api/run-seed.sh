@@ -1,0 +1,8 @@
+#!/bin/sh
+
+SEED_TOTAL=${SEED_TOTAL:-5000}
+SEED_WHITELIST=${SEED_WHITELIST:-1500}
+SEED_EXCLUSIVE=${SEED_EXCLUSIVE:-400}
+
+echo "Running seed: total=$SEED_TOTAL, whitelist=$SEED_WHITELIST, exclusive=$SEED_EXCLUSIVE"
+node dist/libs/scripts/seed.js "$SEED_TOTAL" "$SEED_WHITELIST" "$SEED_EXCLUSIVE"

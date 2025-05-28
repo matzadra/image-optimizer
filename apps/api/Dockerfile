@@ -18,9 +18,12 @@ FROM node:20-alpine
 
 WORKDIR /app
 
+COPY --from=builder /app/apps/worker/wait-for.sh ./wait-for.sh
+COPY --from=builder /app/apps/api/run-seed.sh ./run-seed.sh
 COPY package*.json ./
 RUN npm install --omit=dev
 
 COPY --from=builder /app/dist ./dist
+RUN chmod +x run-seed.sh wait-for.sh
 
-CMD ["node", "dist/apps/api/src/main.js"]
+CMD ["./wait-for.sh", "mongo:27017", "--", "sh", "-c", "./run-seed.sh && node dist/apps/api/src/main.js"]

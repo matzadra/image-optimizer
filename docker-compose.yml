@@ -15,6 +15,9 @@ services:
       - MONGO_URL=mongodb://mongo:27017/image-optimizer
       - UPLOAD_DIR=/app/uploads
       - OUTPUT_DIR=/app/outputs
+      - SEED_TOTAL=4000
+      - SEED_WHITELIST=1000
+      - SEED_EXCLUSIVE=300
     depends_on:
       - mongo
       - rabbitmq
