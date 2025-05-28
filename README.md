@@ -1,5 +1,3 @@
-
-````
 # NOVA FEATURE: Filtragem de Assets Otimizados por Cliente
 
 A rota `/assets` retorna apenas imagens otimizadas com `status: "done"` e `taskId` autorizado por cliente, via whitelist (`OptimizedAssetModel`).
