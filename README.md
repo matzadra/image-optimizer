@@ -1,5 +1,12 @@
 # NOVA FEATURE: Filtragem de Assets Otimizados por Cliente
+## Validação de assets otimizados (whitelist por client)
 
+A aplicação utiliza uma validação explícita para garantir que **somente assets otimizados sejam carregados**.
+
+Essa lógica é baseada na collection `optimized_assets`, que funciona como uma **whitelist indexada por `clientId` + `taskId`**.  
+Isso permite que múltiplos clientes tenham suas próprias listas de assets permitidos.
+
+---
 A rota `/assets` retorna apenas imagens otimizadas com `status: "done"` e `taskId` autorizado por cliente, via whitelist (`OptimizedAssetModel`).
 
 ---
