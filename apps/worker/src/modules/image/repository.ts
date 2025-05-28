@@ -1,10 +1,10 @@
-import { ImageTaskModel } from "@libs/mongo/imageTask.model.js";
+import { ImageTaskModel } from "@libs/mongo/image-task/image-task.model.js";
+import type { ImageTaskEntity } from "@libs/mongo/image-task/image-task.entity.js";
 import type {
   TaskStatus,
   OriginalMetadata,
   VersionInfo,
-  ImageTaskDocument,
-} from "@libs/mongo/imageTask.model.js";
+} from "@libs/types/task.js";
 
 type UpdateTaskData = {
   originalMetadata?: OriginalMetadata;
@@ -17,7 +17,7 @@ export async function updateTaskStatus(
   taskId: string,
   status: TaskStatus,
   data?: UpdateTaskData
-): Promise<ImageTaskDocument | null> {
+): Promise<ImageTaskEntity | null> {
   return ImageTaskModel.findOneAndUpdate(
     { taskId },
     {

@@ -11,7 +11,8 @@
     "types": ["vitest"],
     "paths": {
       "@shared/*": ["shared/*"],
-      "@libs/*": ["libs/*"]
+      "@libs/*": ["libs/*"],
+      "@modules/*": ["apps/api/src/modules/*"]
     }
   }
 }

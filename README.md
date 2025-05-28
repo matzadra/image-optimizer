@@ -1,4 +1,82 @@
 
+````
+# NOVA FEATURE: Filtragem de Assets Otimizados por Cliente
+
+A rota `/assets` retorna apenas imagens otimizadas com `status: "done"` e `taskId` autorizado por cliente, via whitelist (`OptimizedAssetModel`).
+
+---
+
+### 🔍 Rota
+
+GET /assets?clientId=trakto&limit=50&offset=0
+
+Parâmetros:
+
+| Param    | Tipo   | Default | Descrição                              |
+| -------- | ------ | ------- | -------------------------------------- |
+| clientId | string | —       | Identificador do cliente (obrigatório) |
+| limit    | int    | 50      | Quantidade de resultados retornados    |
+| offset   | int    | 0       | Deslocamento inicial da consulta       |
+
+---
+
+### Exemplo de requisição
+
+```bash
+curl "http://localhost:3000/assets?clientId=trakto&limit=50&offset=0"
+````
+
+---
+
+### Exemplo de resposta
+
+```json
+{
+  "total": 2800,
+  "count": 50,
+  "offset": 0,
+  "limit": 50,
+  "data": [
+    {
+      "taskId": "task-1",
+      "displayId": "D-1",
+      "originalFilename": "img-1.jpg",
+      "status": "done",
+      "createdAt": "Date",
+      "updatedAt": "Date"
+    }
+  ]
+}
+```
+
+---
+
+### Seed Automático (na inicialização da API)
+
+Executado via script `run-seed.sh`, controlado por variáveis no `docker-compose.yml`:
+
+| Variável        | Descrição                             | Padrão |
+| --------------- | ------------------------------------- | ------ |
+| SEED\_TOTAL     | Quantidade total de ImageTasks        | 5000   |
+| SEED\_WHITELIST | Quantas entram na whitelist           | 1500   |
+| SEED\_EXCLUSIVE | Destas, quantas são do tipo exclusive | 400    |
+
+No Dockerfile:
+
+CMD \["./wait-for.sh", "mongo:27017", "--", "sh", "-c", "./run-seed.sh && node dist/apps/api/src/main.js"]
+
+---
+
+### Conclusão Técnica
+
+* Filtragem real por `status: "done"` + whitelist por cliente
+* Paginação feita diretamente no banco com `.skip().limit()`
+* Índice composto `{ clientId, taskId }` garante performance
+* Rota pública e desacoplada da lógica de processamento
+* Seed configurável e executado automaticamente na API
+* Estrutura pronta para cache se necessário (ex: Redis)
+---
+
 # Image Optimizer
 
 Serviço backend para otimização de imagens, geração de múltiplas versões e gerenciamento assíncrono via fila de mensagens.

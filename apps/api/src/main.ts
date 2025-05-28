@@ -3,6 +3,7 @@ import multipart from "@fastify/multipart";
 import { imageRoutes } from "./modules/image/route.js";
 import { connectToMongo } from "@libs/mongo/connection.js";
 import { getLoggerOptions } from "./config/logger.js";
+import { clientAssetsRoutes } from "./modules/client-assets/route.js";
 
 export const app: FastifyInstance = Fastify({
   logger: getLoggerOptions(),
@@ -19,6 +20,7 @@ app.get("/health", async () => {
 });
 
 app.register(imageRoutes);
+app.register(clientAssetsRoutes);
 
 async function start(): Promise<void> {
   try {

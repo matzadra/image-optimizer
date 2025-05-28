@@ -11,6 +11,7 @@ export default {
         alias: {
           "@shared": "./shared",
           "@libs": "./libs",
+          "@modules": "./apps/api/src/modules",
         },
         extensions: [".js", ".ts"],
       },
